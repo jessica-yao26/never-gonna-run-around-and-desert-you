@@ -10,9 +10,9 @@ from django.db import models
 # 	phone_number = models.CharField(max_length=10, validators=[UniqueValidator(queryset=User.objects.all())])
 class User(models.Model):
 	email = models.EmailField(unique=True)
-	phone_number = models.CharField(max_length=30, unique=True)
-	username = models.CharField(max_length=30, unique=True)
-	password = models.CharField(max_length=30)
+	phone_number = models.CharField(unique=True)
+	username = models.CharField(unique=True)
+	password = models.CharField()
 	REQUIRED_FIELDS = []
 	USERNAME_FIELD = 'username'
 	is_anonymous = False

@@ -80,7 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '/Users/jessicayao/api/app_api/app_api/my.cnf',
+            'read_default_file': '/Users/jessicayao/Desktop/api/app_api/app_api/my.cnf',
         },
     }
 }

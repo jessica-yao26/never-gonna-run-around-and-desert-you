@@ -38,6 +38,11 @@ class UserExistsByEmail(APIView):
 
         try:
             user = User.objects.get(email=email) # retrieve the user using username
+            print("this is user")
+            print(user)
+            users = User.objects.all()
+            "these are users"
+            print(users)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND) # return false as user does not exist
         else:
@@ -53,6 +58,11 @@ class UserExistsByUsername(APIView):
         username = self.request.query_params.get('username')  
         try:
             user = User.objects.get(username=username) # retrieve the user using username
+            print("this is user")
+            print(user)
+            users = User.objects.all()
+            "these are users"
+            print(users)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND) # return false as user does not exist
         else:

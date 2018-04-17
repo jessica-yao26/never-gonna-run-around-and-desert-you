@@ -185,8 +185,8 @@ class AccountsTest(APITestCase):
     def test_check_email_not_unique(self):
         data = {
                 'email': 'test@example.com',
-                'username' : 'foobar',
-                'password': 'foobarbaz',
+                'username' : 'foobar1',
+                'password': 'foobarbaz123',
                 'first_name': 'john',
                 'last_name': 'smith'
         }

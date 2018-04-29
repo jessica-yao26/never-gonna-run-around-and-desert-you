@@ -27,6 +27,7 @@ class AccountsTest(APITestCase):
         # URL for creating an account.
         self.create_url = reverse('account-create')
         self.check_email = reverse('user-lookup-email')
+        self.check_username = reverse('user-lookup-username')
         self.login = reverse('login')
 
     def test_create_user(self):
@@ -173,10 +174,6 @@ class AccountsTest(APITestCase):
     def test_check_email_unique(self):
         data = {
                 'email': 'unique@aol.com',
-                'username' : 'foobar',
-                'password': 'foobarbaz',
-                'first_name': 'john',
-                'last_name': 'smith'
         }
 
         response = self.client.get(self.check_email, data, format='json')
@@ -186,13 +183,27 @@ class AccountsTest(APITestCase):
     def test_check_email_not_unique(self):
         data = {
                 'email': 'test@example.com',
-                'username' : 'foobar1',
-                'password': 'foobarbaz123',
-                'first_name': 'john',
-                'last_name': 'smith'
         }
 
         response = self.client.get(self.check_email, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_check_username_unique(self):
+        data = {
+                'username' : 'foobar123',
+        }
+
+        response = self.client.get(self.check_username, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_check_username_not_unique(self):
+        data = {
+                'username' : 'testuser',
+        }
+
+        response = self.client.get(self.check_username, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(User.objects.count(), 1)
 

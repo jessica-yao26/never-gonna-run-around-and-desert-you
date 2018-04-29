@@ -13,7 +13,7 @@ User = get_user_model()
 # 	def test_user_is_valid(self):
 # 		user = User(email='ab@aol.com')
 # 		user = User(username='asdfadf')
-#         user = User(last_name='Yao')
+#       user = User(last_name='Yao')
 # 		user = User(password='pass')
 # 		user = User(first_name='Jessica')
 # 		user.full_clean()
@@ -27,6 +27,7 @@ class AccountsTest(APITestCase):
         # URL for creating an account.
         self.create_url = reverse('account-create')
         self.check_email = reverse('user-lookup-email')
+        self.login = reverse('login')
 
     def test_create_user(self):
         """
@@ -192,5 +193,41 @@ class AccountsTest(APITestCase):
         }
 
         response = self.client.get(self.check_email, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_check_email_login_wrong_password(self):
+        data = {
+            'username': 'test@example.com',
+            'password': 'testpassword1'
+        }
+        response = self.client.post(self.login, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(User.objects.count(), 1)
+    
+    def test_check_email_login_correct_password(self):
+        data = {
+            'username': 'test@example.com',
+            'password': 'testpassword'
+        }
+        response = self.client.post(self.login, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_check_username_login_wrong_password(self):
+        data = {
+            'username': 'testuser',
+            'password': 'testpassword1'
+        }
+        response = self.client.post(self.login, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(User.objects.count(), 1)
+    
+    def test_check_username_login_correct_password(self):
+        data = {
+            'username': 'testuser',
+            'password': 'testpassword'
+        }
+        response = self.client.post(self.login, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(User.objects.count(), 1)

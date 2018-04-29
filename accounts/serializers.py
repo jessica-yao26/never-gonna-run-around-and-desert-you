@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 
 User = get_user_model()
 
@@ -14,8 +14,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['email'], validated_data['username'], validated_data['password'], validated_data['first_name'], validated_data['last_name'])
-        return user
+        return user        
 
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name')
+
+class TokenCreateSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(min_length=8, write_only=True)
+
+    def validate(self, validated_data):
+        user = authenticate(username=validated_data.get('username'), password=validated_data.get('password'))
+        if not user:
+            raise serializers.ValidationError("invalid_credentials")
+        validated_data['user'] = user
+        return validated_data

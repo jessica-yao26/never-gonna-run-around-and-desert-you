@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-
 # from rest_framework.validators import UniqueValidator
 
 # class styloUser(AbstractUser):
@@ -59,7 +58,6 @@ class User(AbstractBaseUser):
 	is_authenticated = True
 	is_active = models.BooleanField(default=True)
 	is_admin = models.BooleanField(default=False)
-
 	objects = UserManager()
 
 	# user = User.objects.create_user(username=form.cleaned_data['username'],
